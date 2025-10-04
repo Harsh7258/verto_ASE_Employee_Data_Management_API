@@ -1,5 +1,5 @@
 const sqlite = require("sqlite3").verbose();
-const dbName = './config/Employee_Data.db';
+const dbName = `${process.env.DB_NAME}`;
 
 const db = new sqlite.Database(dbName, (err) => {
     if(err){
