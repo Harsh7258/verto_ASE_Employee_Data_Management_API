@@ -48,15 +48,15 @@ const getEmployeeById = (id, cb) => {
     })
 }
 
-// @desc retrieve given employees by seraching 
-// @GET Employee
+// @desc retrieve given employees by searching 
+// @GET  Employee
 
 const searchEmployee = (query, cb) => {
     const sql = `
         SELECT * FROM Employees 
         WHERE id LIKE ? OR name LIKE ? OR email LIKE ?
     `;
-    const param = [`%${query}%`, `%${query}%`, `%${query}%`];
+    const param = [`%${query}%`, `%${query}%`, `%${query}%`]; // query = id, name, email
 
     db.all(sql, param, (err, rows) => {
         if(err){

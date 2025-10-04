@@ -13,7 +13,8 @@ const db = new sqlite.Database(dbName, (err) => {
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name TEXT NOT NULL,
                     email TEXT NOT NULL UNIQUE,
-                    position TEXT NOT NULL
+                    position TEXT NOT NULL,
+                    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
                 )`, (err) => {
                     if (err) {
                         console.log("Error creating employees table:", err.message);
@@ -22,6 +23,14 @@ const db = new sqlite.Database(dbName, (err) => {
                     }
                 }
             )
+            // drop table 
+            // db.run("DROP TABLE IF EXISTS Employees", (err) => {
+            //     if (err) {
+            //         console.log("Error dropping table:", err.message);
+            //     } else {
+            //         console.log("Employees table dropped successfully");
+            //     }
+            // });
         })
     }
 })
