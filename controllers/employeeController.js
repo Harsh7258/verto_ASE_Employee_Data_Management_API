@@ -1,14 +1,16 @@
 // const data = require('../config/sample_data.json');
+const expressAsyncHandler = require("express-async-handler");
 const Employee = require("../models/employee.model");
 
 // const data = []; // temporary storage testing
 
-const getAllEmployees = (req, res) => {
+const getAllEmployees = expressAsyncHandler(async(req, res) => {
     Employee.getAllEmployee((err, emp) => {
         if(err){
-            return res.status(500).json({
-                error: err.message
-            })
+            // return res.status(500).json({
+            //     error: err.message
+            // })
+            return next(err)
         } 
 
         res.status(200).json({
@@ -16,24 +18,25 @@ const getAllEmployees = (req, res) => {
             employees: emp
         })
     })
-}
+})
 
-const getEmployee = (req, res) => {
+const getEmployee = expressAsyncHandler(async (req, res, next) => {
     const { id } = req.params;
     // console.log(id);
 
     Employee.getEmployeeById(id, (err, emp) => {
         if(err){
-            return res.status(500).json({
-                error: err.message
-            })
+            // return res.status(500).json({
+            //     error: err.message
+            // })
+            return next(err)
         } 
 
         if(!emp){
-            return res.status(404).json({
-                status: "not found",
-                message: "Employee not found"
+            res.status(404).json({
+                status: "not found"
             })
+            return next(new Error("Employee not found"))
         }
 
         res.status(200).json({
@@ -41,9 +44,9 @@ const getEmployee = (req, res) => {
             employee: emp
         })
     })
-}
+})
 
-const createEmployee = (req, res) => {
+const createEmployee = expressAsyncHandler(async(req, res, next) => {
     // const employee = { // testing in temporary array
     //     id: data.length + 1,
     //     name: req.body.name,
@@ -59,9 +62,10 @@ const createEmployee = (req, res) => {
 
     Employee.createEmployee(req.body, (err, emp) => {
         if(err){
-            return res.status(500).json({
-                error: err.message
-            })
+            // return res.status(500).json({
+            //     error: err.message
+            // })
+            return next(err)
         }
 
         res.status(201).json({
@@ -69,24 +73,25 @@ const createEmployee = (req, res) => {
             employee: emp
         })
     })
-}
+})
 
-const updateEmployee = (req, res) => {
+const updateEmployee = expressAsyncHandler(async (req, res, next) => {
     const { id } = req.params;
     // console.log(id);
 
     Employee.updateEmployee(id, req.body, (err, chng) => {
         if(err){
-            return res.status(500).json({
-                error: err.message
-            })
+            // return res.status(500).json({
+            //     error: err.message
+            // })
+            return next(err)
         } 
 
         if(chng.changes === 0 || !id){
-            return res.status(404).json({
-                status: "not found",
-                message: "Employee not found"
+            res.status(404).json({
+                status: "not found"
             })
+            return next(new Error("Employee not found"))
         }
 
         res.status(200).json({
@@ -94,23 +99,24 @@ const updateEmployee = (req, res) => {
             message: "Updated employee!"
         })
     })
-}
+})
 
-const deleteEmployee = (req, res) => {
+const deleteEmployee = expressAsyncHandler(async(req, res, next) => {
     const { id } = req.params;
     // console.log(id);
 
     Employee.deleteEmployee(id, (err, chng) => {
         if(err){
-            return res.status(500).json({
-                error: err.message
-            })
+            // return res.status(500).json({
+            //     error: err.message
+            // })
+            return next(err);
         } 
         if(chng.changes === 0 || !id){
-            return res.status(404).json({
-                status: "not found",
-                message: "Employee not found"
+            res.status(404).json({
+                status: "not found"
             })
+            return next(new Error("Employee not found"))
         }
 
         res.status(200).json({
@@ -118,7 +124,7 @@ const deleteEmployee = (req, res) => {
             message: "Deleted employee"
         })
     })
-}
+})
 
 module.exports = { 
     getAllEmployees,
