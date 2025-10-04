@@ -3,14 +3,34 @@ const db = require("../config/connectDB");
 // @desc retrieve all employees
 // @ALL Employees
 
-const getAllEmployee = (cb) => {
-    const sql = `SELECT * FROM Employees`;
-    db.all(sql, [], (err, rows) => {
+const getAllEmployee = (sort, limit, offset, cb) => {
+    let order = "";
+    if(sort === "asc"){
+        order = "ORDER BY createdAt ASC"
+    } else if(sort == "desc"){
+        order = "ORDER BY createdAt DESC"
+    }
+
+    const sql = `
+        SELECT * FROM Employees 
+        ${order}
+        LIMIT ? OFFSET ?
+    `;
+    const cntSql = `SELECT COUNT(*) AS count FROM Employees`;
+
+    db.get(cntSql, [], (err, row) => {
         if(err){
-            cb(err, null);
-        } else {
-            cb(null, rows);
+            cb(err);
         }
+
+        const totalRows = row.count;
+        db.all(sql, [limit, offset], (err, emp) => {
+            if(err){
+                cb(err, null);
+            } else {
+                cb(null, emp, totalRows);
+            }
+        })
     })
 }
 
@@ -28,19 +48,48 @@ const getEmployeeById = (id, cb) => {
     })
 }
 
+// @desc retrieve given employees by seraching 
+// @GET Employee
+
+const searchEmployee = (query, cb) => {
+    const sql = `
+        SELECT * FROM Employees 
+        WHERE id LIKE ? OR name LIKE ? OR email LIKE ?
+    `;
+    const param = [`%${query}%`, `%${query}%`, `%${query}%`];
+
+    db.all(sql, param, (err, rows) => {
+        if(err){
+            cb(err, null);
+        } else {
+            cb(null, rows);
+        }
+    })
+}
+
 // @desc creating data and inserting in table
 // @RUN to insert Employees
 
 const createEmployee = (emp, cb) => {
     const { name, email, position } = emp;
-    const sql = `INSERT INTO Employees(name, email, position) VALUES (?, ?, ?)`;
+    const sql = `
+        INSERT INTO Employees(name, email, position) 
+        VALUES (?, ?, ?)
+    `;
     
     db.run(sql, [name, email, position], function(err) { // function used for this
         if(err){
             cb(err, null);
         } else {
             // this.lastID gives inserted row ID
-            cb(null, {id: this.lastID, ...emp});
+            db.get(`SELECT * FROM Employees WHERE id = ?`, [this.lastID], (err, row) => {
+                // console.log(row);
+                if (err) {
+                    cb(err, null);
+                } else {
+                    cb(null, row);
+                }
+            });
         }
     })
 }
@@ -50,7 +99,10 @@ const createEmployee = (emp, cb) => {
 
 const updateEmployee = (id, emp, cb) => {
     const { name, email, position } = emp;
-    const sql = `UPDATE Employees SET name = ?, email = ?, position = ? WHERE id = ?`;
+    const sql = `
+        UPDATE Employees SET name = ?, email = ?, position = ? 
+        WHERE id = ?
+    `;
     
     db.run(sql, [name, email, position, id], function(err) { // function used for this
         if(err){
@@ -83,5 +135,6 @@ module.exports = {
     getEmployeeById, 
     createEmployee, 
     updateEmployee, 
-    deleteEmployee
+    deleteEmployee,
+    searchEmployee
 };
