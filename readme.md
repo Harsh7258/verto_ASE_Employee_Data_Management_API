@@ -9,18 +9,22 @@ A **RESTful API** for managing employee records, built with **Node.js**, **Expre
 ## Installation & Setup: to run it locally
 
 1. Clone the repository:
-   git clone <repo-url>
+
+   > git clone <repo-url>
 
 2. Install dependencies:
-   run
-   npm install
+
+   > run
+   > npm install
 
 3. create .env file with:
-   PORT=8000
-   DB_NAME=your_db_name
+
+   > PORT=8000
+   > DB_NAME=your_db_name
 
 4. Start the react:
-   npm run dev
+
+   > npm run dev
 
 5. Server runs at http://localhost:8000
 
