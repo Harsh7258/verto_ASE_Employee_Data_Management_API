@@ -6,6 +6,30 @@ A **RESTful API** for managing employee records, built with **Node.js**, **Expre
 
 ## Project Overview
 
+## Installation & Setup: to run it locally
+
+1. Clone the repository:
+   git clone <repo-url>
+
+2. Install dependencies:
+   run
+   npm install
+
+3. create .env file with:
+   PORT=8000
+   DB_NAME=your_db_name
+
+4. Start the react:
+   npm run dev
+
+5. Server runs at http://localhost:8000
+
+6. Connect it with frontend Employee Data Employeement Client
+
+- **Employee Data Employeement Client**: [Connect this frontend](https://github.com/Harsh7258/verto_ASE_Employee_Data_Management_Client)
+
+6. Good to go!!
+
 - **Goal:** Create a simple CRUD backend for employee management.
 - **Database:** SQLite (lightweight, file-based database for easy setup and prototyping)
 - **Architecture:** MVC (Model-View-Controller) pattern for clear separation of concerns.
@@ -30,23 +54,6 @@ A **RESTful API** for managing employee records, built with **Node.js**, **Expre
 
 - **Postman Collection:** [Click here to view API docs](https://documenter.getpostman.com/view/31106866/2sB3QJMpxQ)
 - **Live API Endpoint:** [Deployed API Link](verto-ase-employee-data-management-api-production.up.railway.app)
-
-## Installation & Setup
-
-1. Clone the repository:
-   git clone <repo-url>
-
-2. Install dependencies:
-   cd backend
-   npm install
-
-3. Create .env file with:
-   PORT=5000
-
-4. Start the server:
-   npm run dev
-
-5. Server runs at http://localhost:5000
 
 ### Error Handling
 
